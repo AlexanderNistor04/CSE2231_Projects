@@ -33,7 +33,8 @@ public class NaturalNumber3 extends NaturalNumberSecondary {
      */
     private void createNewRep() {
 
-        this.rep = String.valueOf(0);
+        //Creates "zero" string
+        this.rep = "0";
 
     }
 
@@ -46,6 +47,7 @@ public class NaturalNumber3 extends NaturalNumberSecondary {
      */
     public NaturalNumber3() {
 
+        //Creates zero string
         this.createNewRep();
 
     }
@@ -59,6 +61,7 @@ public class NaturalNumber3 extends NaturalNumberSecondary {
     public NaturalNumber3(int i) {
         assert i >= 0 : "Violation of: i >= 0";
 
+        //Creates string with value of integer inputted
         this.rep = String.valueOf(i);
 
     }
@@ -74,6 +77,7 @@ public class NaturalNumber3 extends NaturalNumberSecondary {
         assert s.matches("0|[1-9]\\d*") : ""
                 + "Violation of: there exists n: NATURAL (s = TO_STRING(n))";
 
+        //Creates string with inputted string
         this.rep = s;
 
     }
@@ -87,6 +91,7 @@ public class NaturalNumber3 extends NaturalNumberSecondary {
     public NaturalNumber3(NaturalNumber n) {
         assert n != null : "Violation of: n is not null";
 
+        //Creates string with converted and inputted natural number
         this.rep = n.toString();
 
     }
@@ -134,6 +139,7 @@ public class NaturalNumber3 extends NaturalNumberSecondary {
         assert 0 <= k : "Violation of: 0 <= k";
         assert k < RADIX : "Violation of: k < 10";
 
+        //Concatenates inputted integer to the end of the string
         this.rep += "" + k;
 
     }
@@ -141,10 +147,13 @@ public class NaturalNumber3 extends NaturalNumberSecondary {
     @Override
     public final int divideBy10() {
 
+        //Stores remainder in temporary string variables to be parsed into an int
         String numString = this.rep.substring(this.rep.length() - 1);
 
+        //Parses string remainder into int to be returned
         int num = Integer.parseInt(numString);
 
+        //Sets string to be its same value, with the last digit cut off
         this.rep = this.rep.substring(0, this.rep.length() - 1);
 
         return num;
@@ -153,9 +162,12 @@ public class NaturalNumber3 extends NaturalNumberSecondary {
     @Override
     public final boolean isZero() {
 
+        //Instantiates boolean for whether string is zero
         boolean zero = false;
 
-        if (this.rep.equals("")) {
+        //If-statement checks if string's value is zero
+        //if true, boolean zero is set to true
+        if (this.rep.equals("0")) {
             zero = true;
         }
 
