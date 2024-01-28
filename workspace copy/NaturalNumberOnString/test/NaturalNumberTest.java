@@ -1,3 +1,7 @@
+import static org.junit.Assert.assertEquals;
+
+import org.junit.Test;
+
 import components.naturalnumber.NaturalNumber;
 
 /**
@@ -98,5 +102,12 @@ public abstract class NaturalNumberTest {
     protected abstract NaturalNumber constructorRef(NaturalNumber n);
 
     // TODO - add test cases for four constructors, multiplyBy10, divideBy10, isZero
+
+    @Test
+    public final void test_constructor_empty() {
+        NaturalNumber n1 = this.constructorRef();
+        NaturalNumber n2 = this.constructorTest();
+        assertEquals(n1, n2);
+    }
 
 }
