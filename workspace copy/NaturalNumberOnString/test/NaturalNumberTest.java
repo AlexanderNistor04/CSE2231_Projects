@@ -108,7 +108,7 @@ public abstract class NaturalNumberTest {
      * test of empty constructor.
      */
     @Test
-    public final void test_constructor_empty() {
+    public final void testConstructorEmpty() {
         NaturalNumber n1 = this.constructorRef();
         NaturalNumber n2 = this.constructorTest();
         assertEquals(n1, n2);
@@ -118,7 +118,7 @@ public abstract class NaturalNumberTest {
      * test of int constructor.
      */
     @Test
-    public final void test_constructor_int() {
+    public final void testConstructorInt() {
         NaturalNumber n1 = this.constructorRef(1);
         NaturalNumber n2 = this.constructorTest(1);
         assertEquals(n1, n2);
@@ -128,7 +128,7 @@ public abstract class NaturalNumberTest {
      * test of String constructor.
      */
     @Test
-    public final void test_constructor_String() {
+    public final void testConstructorString() {
         NaturalNumber n1 = this.constructorRef("1");
         NaturalNumber n2 = this.constructorTest("1");
         assertEquals(n1, n2);
@@ -138,7 +138,7 @@ public abstract class NaturalNumberTest {
      * test of NaturalNumber constructor.
      */
     @Test
-    public final void test_constructor_NaturalNumber() {
+    public final void testConstructorNN() {
         NaturalNumber n1 = this.constructorRef();
         NaturalNumber n2 = this.constructorTest();
         NaturalNumber n3 = this.constructorRef(n1);
@@ -148,10 +148,10 @@ public abstract class NaturalNumberTest {
 
     //---------- multiplyBy10 tests ----------
     /**
-     * test with this.entries = <> and multiplyBy10(0)
+     * test with this.entries = <> and multiplyBy10(0).
      */
     @Test
-    public final void test_multiplyBy10_1() {
+    public final void test1MultiplyBy10() {
         NaturalNumber n1 = this.constructorRef();
         n1.multiplyBy10(0);
         NaturalNumber n2 = this.constructorRef(0);
@@ -159,10 +159,10 @@ public abstract class NaturalNumberTest {
     }
 
     /**
-     * test with this.entries = <> and multiplyBy10(1)
+     * test with this.entries = <> and multiplyBy10(1).
      */
     @Test
-    public final void test_multiplyBy10_2() {
+    public final void test2MultiplyBy10() {
         NaturalNumber n1 = this.constructorRef();
         n1.multiplyBy10(1);
         NaturalNumber n2 = this.constructorRef(1);
@@ -170,10 +170,10 @@ public abstract class NaturalNumberTest {
     }
 
     /**
-     * test with this.entries = <1> and multiplyBy10(0)
+     * test with this.entries = <1> and multiplyBy10(0).
      */
     @Test
-    public final void test_multiplyBy10_3() {
+    public final void test3MultiplyBy10() {
         NaturalNumber n1 = this.constructorRef(1);
         n1.multiplyBy10(0);
         NaturalNumber n2 = this.constructorRef(10);
@@ -181,10 +181,10 @@ public abstract class NaturalNumberTest {
     }
 
     /**
-     * test with this.entries = <1> and multiplyBy10(1)
+     * test with this.entries = <1> and multiplyBy10(1).
      */
     @Test
-    public final void test_multiplyBy10_4() {
+    public final void test4MultiplyBy10() {
         NaturalNumber n1 = this.constructorRef(1);
         n1.multiplyBy10(1);
         NaturalNumber n2 = this.constructorRef(11);
@@ -192,10 +192,10 @@ public abstract class NaturalNumberTest {
     }
 
     /**
-     * test with this.entries = <1,2,3,4,5> and multiplyBy10(6)
+     * test with this.entries = <1,2,3,4,5> and multiplyBy10(6).
      */
     @Test
-    public final void test_multiplyBy10_5() {
+    public final void test5MultiplyBy10() {
         NaturalNumber n1 = this.constructorRef(12345);
         n1.multiplyBy10(6);
         NaturalNumber n2 = this.constructorRef(123456);
@@ -204,10 +204,10 @@ public abstract class NaturalNumberTest {
 
     //---------- divideBy10 tests ----------
     /**
-     * test with this.entries = <1>
+     * test with this.entries = <1>.
      */
     @Test
-    public final void test_divideBy10_1() {
+    public final void test1divideBy10() {
         NaturalNumber n1 = this.constructorRef(1);
         NaturalNumber n2 = this.constructorRef(0);
         int i = n1.divideBy10();
@@ -217,10 +217,10 @@ public abstract class NaturalNumberTest {
     }
 
     /**
-     * test with this.entries = <1,0>
+     * test with this.entries = <1,0>.
      */
     @Test
-    public final void test_divideBy10_2() {
+    public final void test2divideBy10() {
         NaturalNumber n1 = this.constructorRef(10);
         NaturalNumber n2 = this.constructorRef(1);
         int i = n1.divideBy10();
@@ -229,8 +229,11 @@ public abstract class NaturalNumberTest {
         assertEquals(i, j);
     }
 
+    /**
+     * test with this.entries = <1,2,3,4,5,6>.
+     */
     @Test
-    public final void test_divideBy10_3() {
+    public final void test3divideBy10() {
         NaturalNumber n1 = this.constructorRef(123456);
         NaturalNumber n2 = this.constructorRef(12345);
         int i = n1.divideBy10();
@@ -241,10 +244,10 @@ public abstract class NaturalNumberTest {
 
     //---------- isZero tests ----------
     /**
-     * test with this.entries = <1>
+     * test with this.entries = <1>.
      */
     @Test
-    public final void test_isZero_1() {
+    public final void test1isZero() {
         NaturalNumber n1 = this.constructorRef(1);
         boolean a = n1.isZero();
         boolean b = false;
@@ -252,10 +255,10 @@ public abstract class NaturalNumberTest {
     }
 
     /**
-     * test with this.entries = <0>
+     * test with this.entries = <0>.
      */
     @Test
-    public final void test_isZero_2() {
+    public final void test2isZero() {
         NaturalNumber n1 = this.constructorRef(0);
         boolean a = n1.isZero();
         boolean b = true;
@@ -264,10 +267,10 @@ public abstract class NaturalNumberTest {
     }
 
     /**
-     * test with this.entries = <0>
+     * test with this.entries = <0>.
      */
     @Test
-    public final void test_isZero_3() {
+    public final void test3isZero() {
         NaturalNumber n1 = this.constructorRef(12345);
         boolean a = n1.isZero();
         boolean b = false;
