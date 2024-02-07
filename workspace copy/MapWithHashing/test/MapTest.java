@@ -189,7 +189,7 @@ public abstract class MapTest {
         Map<String, String> m1 = this.createFromArgsRef();
         Map<String, String> m2 = this.createFromArgsTest("1", "one");
         String val1 = "one";
-        String val2 = m2.remove("1").value();
+        String val2 = m2.removeAny().value();
         assertEquals(m1, m2);
         assertEquals(val1, val2);
     }
@@ -231,7 +231,7 @@ public abstract class MapTest {
     }
 
     /*
-     * --------------- tests for value() ---------------
+     * --------------- tests for hasKey() ---------------
      */
 
     /**
@@ -285,7 +285,7 @@ public abstract class MapTest {
     /**
      * test for value with m1 = <("a", "A"), ("b", "B"), ("c", "C"), ("d", "D"),
      * ("e", "E"), ("f", "F"), ("g", "G"), ("h", "H"), ("i", "I"), ("j", "J")>
-     * and hasKey("j").
+     * and hasKey("J").
      */
     @Test
     public final void testhasKey5() {
@@ -293,7 +293,7 @@ public abstract class MapTest {
                 "C", "d", "D", "e", "E", "f", "F", "g", "G", "h", "H", "i", "I",
                 "j", "J");
         boolean val1 = true;
-        boolean val2 = m.hasKey("j");
+        boolean val2 = m.hasKey("J");
         assertEquals(val1, val2);
     }
 
