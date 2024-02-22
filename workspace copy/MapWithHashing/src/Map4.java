@@ -238,8 +238,11 @@ public class Map4<K, V> extends MapSecondary<K, V> {
         //Stores removed pair
         Pair<K, V> pairRemoved = this.hashTable[index].removeAny();
 
+        //Decrement size after value is removed
+        this.size--;
+
         // This line added just to make the component compilable.
-        return this.hashTable[index].remove(pairRemoved.key());
+        return pairRemoved;
     }
 
     @Override
@@ -267,18 +270,8 @@ public class Map4<K, V> extends MapSecondary<K, V> {
 
     @Override
     public final int size() {
-
-        //Initializes variable to store size
-        int count = 0;
-
-        //For-loop iterates through map to count all valid "buckets" inside
-        for (Map<K, V> map : this.hashTable) {
-            if (map.size() != 0) {
-                count++;
-            }
-        }
-
-        return count;
+        //Returns size
+        return this.size;
     }
 
     @Override
