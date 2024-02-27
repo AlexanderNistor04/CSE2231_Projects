@@ -10,7 +10,7 @@ import components.sortingmachine.SortingMachine;
  * JUnit test fixture for {@code SortingMachine<String>}'s constructor and
  * kernel methods.
  *
- * @author Put your name here
+ * @author Alex Nistor and Akshay Anand
  *
  */
 public abstract class SortingMachineTest {
@@ -121,6 +121,9 @@ public abstract class SortingMachineTest {
      * Sample test cases.
      */
 
+    /**
+     * constructor test.
+     */
     @Test
     public final void testConstructor() {
         SortingMachine<String> m = this.constructorTest(ORDER);
@@ -128,6 +131,9 @@ public abstract class SortingMachineTest {
         assertEquals(mExpected, m);
     }
 
+    /**
+     * empty add test.
+     */
     @Test
     public final void testAddEmpty() {
         SortingMachine<String> m = this.createFromArgsTest(ORDER, true);
@@ -139,5 +145,226 @@ public abstract class SortingMachineTest {
 
     // TODO - add test cases for add, changeToExtractionMode, removeFirst,
     // isInInsertionMode, order, and size
+
+    // --------------- add() tests ---------------
+
+    /**
+     * test with m = (ORDER, true, <"red", "blue">) and add("green").
+     */
+    @Test
+    public final void testAdd1() {
+        SortingMachine<String> m = this.createFromArgsTest(ORDER, true, "red",
+                "green");
+        SortingMachine<String> mExpected = this.createFromArgsRef(ORDER, true,
+                "red", "green", "blue");
+        m.add("blue");
+        assertEquals(mExpected, m);
+    }
+
+    /**
+     * test with m = (ORDER, true, <"red", "orange", "yellow", "green", "blue">)
+     * and add("purple").
+     */
+    @Test
+    public final void testAdd2() {
+        SortingMachine<String> m = this.createFromArgsTest(ORDER, true, "red",
+                "orange", "yellow", "green", "blue");
+        SortingMachine<String> mExpected = this.createFromArgsRef(ORDER, true,
+                "red", "orange", "yellow", "green", "blue", "purple");
+        m.add("purple");
+        assertEquals(mExpected, m);
+    }
+
+// --------------- changeToExtractionMode() tests ---------------
+
+    /**
+     * test with m = (ORDER, true, <>) and changeToExtractionMode().
+     */
+    @Test
+    public final void testChangeToExtractionMode1() {
+        SortingMachine<String> m = this.createFromArgsTest(ORDER, true);
+        SortingMachine<String> mExpected = this.createFromArgsRef(ORDER, false);
+        m.changeToExtractionMode();
+        assertEquals(mExpected, m);
+    }
+
+    /**
+     * test with m = (ORDER, true, <"green">) and changeToExtractionMode().
+     */
+    @Test
+    public final void testChangeToExtractionMode2() {
+        SortingMachine<String> m = this.createFromArgsTest(ORDER, true,
+                "green");
+        SortingMachine<String> mExpected = this.createFromArgsRef(ORDER, false,
+                "green");
+        m.changeToExtractionMode();
+        assertEquals(mExpected, m);
+    }
+
+    /**
+     * test with m = (ORDER, true, <"red", "orange", "yellow", "green", "blue",
+     * "purple">) and changeToExtractionMode().
+     */
+    @Test
+    public final void testChangeToExtractionMode3() {
+        SortingMachine<String> m = this.createFromArgsTest(ORDER, true, "red",
+                "orange", "yellow", "green", "blue", "purple");
+        SortingMachine<String> mExpected = this.createFromArgsRef(ORDER, false,
+                "red", "orange", "yellow", "green", "blue", "purple");
+        m.changeToExtractionMode();
+        assertEquals(mExpected, m);
+    }
+
+// --------------- removeFirst() tests ---------------
+
+    /**
+     * test with m = (ORDER, false, <"green">) and removeFirst().
+     */
+    @Test
+    public final void testRemoveFirst1() {
+        SortingMachine<String> m = this.createFromArgsTest(ORDER, false,
+                "green");
+        SortingMachine<String> mExpected = this.createFromArgsRef(ORDER, false);
+        String s = m.removeFirst();
+        String sExpected = "green";
+        assertEquals(mExpected, m);
+        assertEquals(sExpected, s);
+    }
+
+    /**
+     * test with m = (ORDER, false, <"red", "orange", "yellow", "green", "blue",
+     * "purple">) and removeFirst().
+     */
+    @Test
+    public final void testRemoveFirst2() {
+        SortingMachine<String> m = this.createFromArgsTest(ORDER, false, "red",
+                "orange", "yellow", "green", "blue", "purple");
+        SortingMachine<String> mExpected = this.createFromArgsRef(ORDER, false,
+                "red", "orange", "yellow", "green", "purple");
+        String s = m.removeFirst();
+        String sExpected = "blue";
+        assertEquals(mExpected, m);
+        assertEquals(sExpected, s);
+    }
+
+// --------------- isInInsertionMode() tests ---------------
+
+    /**
+     * test with m = (ORDER, true, <>) and isInInsertionMode().
+     */
+    @Test
+    public final void testIsInInsertionMode1() {
+        SortingMachine<String> m = this.createFromArgsTest(ORDER, true);
+        SortingMachine<String> mExpected = this.createFromArgsRef(ORDER, true);
+        boolean b = m.isInInsertionMode();
+        boolean bExpected = true;
+        assertEquals(mExpected, m);
+        assertEquals(bExpected, b);
+    }
+
+    /**
+     * test with m = (ORDER, false, <>) and isInInsertionMode().
+     */
+    @Test
+    public final void testIsInInsertionMode2() {
+        SortingMachine<String> m = this.createFromArgsTest(ORDER, false);
+        SortingMachine<String> mExpected = this.createFromArgsRef(ORDER, false);
+        boolean b = m.isInInsertionMode();
+        boolean bExpected = false;
+        assertEquals(mExpected, m);
+        assertEquals(bExpected, b);
+    }
+
+    /**
+     * test with m = (ORDER, true, <"green">) and isInInsertionMode().
+     */
+    @Test
+    public final void testIsInInsertionMode3() {
+        SortingMachine<String> m = this.createFromArgsTest(ORDER, true,
+                "green");
+        SortingMachine<String> mExpected = this.createFromArgsRef(ORDER, true,
+                "green");
+        boolean b = m.isInInsertionMode();
+        boolean bExpected = true;
+        assertEquals(mExpected, m);
+        assertEquals(bExpected, b);
+    }
+
+    /**
+     * test with m = (ORDER, false, <"green">) and isInInsertionMode().
+     */
+    @Test
+    public final void testIsInInsertionMode4() {
+        SortingMachine<String> m = this.createFromArgsTest(ORDER, false,
+                "green");
+        SortingMachine<String> mExpected = this.createFromArgsRef(ORDER, false,
+                "green");
+        boolean b = m.isInInsertionMode();
+        boolean bExpected = false;
+        assertEquals(mExpected, m);
+        assertEquals(bExpected, b);
+    }
+
+// --------------- order() tests ---------------
+
+    /**
+     * test with m = (ORDER, true, <>) and order().
+     */
+    @Test
+    public final void testOrder1() {
+        SortingMachine<String> m = this.createFromArgsTest(ORDER, true);
+        SortingMachine<String> mExpected = this.createFromArgsRef(ORDER, true);
+        Comparator<String> c = m.order();
+        Comparator<String> cExpected = ORDER;
+        assertEquals(mExpected, m);
+        assertEquals(cExpected, c);
+    }
+
+    /**
+     * test with m = (ORDER, true, <"red", "orange", "yellow", "green", "blue",
+     * "purple">) and order().
+     */
+    @Test
+    public final void testOrder2() {
+        SortingMachine<String> m = this.createFromArgsTest(ORDER, true, "red",
+                "orange", "yellow", "green", "blue", "purple");
+        SortingMachine<String> mExpected = this.createFromArgsRef(ORDER, true,
+                "red", "orange", "yellow", "green", "blue", "purple");
+        Comparator<String> c = m.order();
+        Comparator<String> cExpected = ORDER;
+        assertEquals(mExpected, m);
+        assertEquals(cExpected, c);
+    }
+
+    // --------------- size() tests ---------------
+
+    /**
+     * test with m = (ORDER, true, <>) and size().
+     */
+    @Test
+    public final void testSize1() {
+        SortingMachine<String> m = this.createFromArgsTest(ORDER, true);
+        SortingMachine<String> mExpected = this.createFromArgsRef(ORDER, true);
+        int size = m.size();
+        int sizeExpected = 0;
+        assertEquals(mExpected, m);
+        assertEquals(size, sizeExpected);
+    }
+
+    /**
+     * test with m = (ORDER, true, <"red", "orange", "yellow", "green", "blue",
+     * "purple">) and size().
+     */
+    @Test
+    public final void testSize2() {
+        SortingMachine<String> m = this.createFromArgsTest(ORDER, true, "red",
+                "orange", "yellow", "green", "blue", "purple");
+        SortingMachine<String> mExpected = this.createFromArgsRef(ORDER, true,
+                "red", "orange", "yellow", "green", "blue", "purple");
+        int size = m.size();
+        int sizeExpected = 6;
+        assertEquals(mExpected, m);
+        assertEquals(size, sizeExpected);
+    }
 
 }
