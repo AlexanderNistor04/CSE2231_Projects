@@ -184,7 +184,7 @@ public class SortingMachine5a<T> extends SortingMachineSecondary<T> {
          */
 
         //Checks if there are at least 2 nodes to compare, in the array
-        if (array.length > 1) {
+        if (array.length > 1 && top <= last) {
 
             //Initializes and assigns values for left and right indexes
             int left = 2 * top + 1;
@@ -203,7 +203,7 @@ public class SortingMachine5a<T> extends SortingMachineSecondary<T> {
                 //Initializes variable to store index for recursion
                 int treeToTravel;
 
-                //Checks for wich node should be swapped with root node
+                //Checks for which node should be swapped with root node
                 if (inside && positionSwap) {
                     exchangeEntries(array, top, right);
                     treeToTravel = right;
