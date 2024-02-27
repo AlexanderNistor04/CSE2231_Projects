@@ -184,27 +184,22 @@ public class SortingMachine5a<T> extends SortingMachineSecondary<T> {
          */
 
         //Checks if there are at least 2 nodes to compare, in the array
-        if (array.length > 1 && top <= last) {
+        if (top <= last) { 
 
             //Initializes and assigns values for left and right indexes
             int left = 2 * top + 1;
-            int right = left++;
+            int right = left + 1;
 
             //Checks if current tree is a heap, if not method sifts through array
             //to make it one
             if (!isHeap(array, top, last, order)) {
 
-                //Checks and stores conditions for if right tree should be traversed
-                //and which node the root should be replaced with
-                boolean inside = right <= last;
-                boolean positionSwap = order.compare(array[left],
-                        array[right]) >= 0;
-
                 //Initializes variable to store index for recursion
                 int treeToTravel;
 
                 //Checks for which node should be swapped with root node
-                if (inside && positionSwap) {
+                if (right <= last
+                        && order.compare(array[left], array[right]) >= 0) {
                     exchangeEntries(array, top, right);
                     treeToTravel = right;
                 } else {
