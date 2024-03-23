@@ -15,7 +15,7 @@ import components.utilities.Tokenizer;
  *             and [$this.body is a BLOCK statement]
  * @correspondence this = ($this.name, $this.context, $this.body)
  *
- * @author Put your name here
+ * @author Akshay Anand and Alexander Nistor
  *
  */
 public class Program2 extends ProgramSecondary {
@@ -106,9 +106,10 @@ public class Program2 extends ProgramSecondary {
      */
     private void createNewRep() {
 
-        // TODO - fill in body
-        // Make sure to use Statement1 from the library
-        // Use Map1L for the context if you want the asserts below to match
+        //Initializes all data structures used to base component
+        this.name = "Unamed";
+        this.context = new Map1L<String, Statement>();
+        this.body = new Statement1();
 
     }
 
@@ -169,26 +170,23 @@ public class Program2 extends ProgramSecondary {
         assert Tokenizer.isIdentifier(n) : ""
                 + "Violation of: n is a valid IDENTIFIER";
 
-        // TODO - fill in body
+        //Changes body name to inputed name
+        this.name = n;
 
     }
 
     @Override
     public final String name() {
 
-        // TODO - fill in body
-
-        // Fix this line to return the result.
-        return null;
+        //Returns name
+        return this.name;
     }
 
     @Override
     public final Map<String, Statement> newContext() {
 
-        // TODO - fill in body
-
-        // Fix this line to return the result.
-        return null;
+        //Returns context based on type currently inside
+        return this.context.newInstance();
     }
 
     @Override
@@ -203,17 +201,25 @@ public class Program2 extends ProgramSecondary {
         assert allBlocks(c) : "Violation of: bodies in c"
                 + " are all BLOCK statements";
 
-        // TODO - fill in body
+        //Creates temporary variable to store swapped context
+        Map<String, Statement> temp = c.newInstance();
+
+        //Stores current context in temporary variable
+        temp.transferFrom(this.context);
+
+        //Changes current context to be the inputed one
+        this.context.transferFrom(c);
+
+        //Stores context taken out in c
+        c.transferFrom(temp);
 
     }
 
     @Override
     public final Statement newBody() {
 
-        // TODO - fill in body
-
-        // Fix this line to return the result.
-        return null;
+        //Returns statement of same dynamic as current body
+        return this.body.newInstance();
     }
 
     @Override
@@ -222,7 +228,17 @@ public class Program2 extends ProgramSecondary {
         assert b instanceof Statement1 : "Violation of: b is a Statement1";
         assert b.kind() == Kind.BLOCK : "Violation of: b is a BLOCK statement";
 
-        // TODO - fill in body
+        //Creates temporary variable to store swapped body
+        Statement temp = b.newInstance();
+
+        //Stores current body in temporary variable
+        temp.transferFrom(this.body);
+
+        //Changes current body to be the inputed one
+        this.body.transferFrom(b);
+
+        //Stores body taken out in c
+        b.transferFrom(temp);
 
     }
 
