@@ -14,7 +14,7 @@ import components.utilities.Tokenizer;
  * JUnit test fixture for {@code Statement}'s constructor and kernel methods.
  *
  * @author Wayne Heym
- * @author Put your name here
+ * @author Alexander Nistor & Akshay Anand
  *
  */
 public abstract class StatementTest {
@@ -25,6 +25,7 @@ public abstract class StatementTest {
     private static final String FILE_NAME_1 = "data/statement-sample.bl";
 
     // TODO - define file names for additional test inputs
+    private static final String FILE_NAME_2 = "data/statement-sample2.bl";
 
     /**
      * Invokes the {@code Statement} constructor for the implementation under
@@ -452,5 +453,319 @@ public abstract class StatementTest {
     }
 
     // TODO - provide additional test cases to thoroughly test StatementKernel
+    /**
+     * Test kind of a WHILE statement.
+     */
+    @Test
+    public final void testKindWhile2() {
+        /*
+         * Setup
+         */
+        final int whilePos = 3;
+        Statement sourceTest = this.createFromFileTest(FILE_NAME_2);
+        Statement sourceRef = this.createFromFileRef(FILE_NAME_2);
+        Statement sTest = sourceTest.removeFromBlock(whilePos);
+        Statement sRef = sourceRef.removeFromBlock(whilePos);
+        Kind kRef = sRef.kind();
+
+        /*
+         * The call
+         */
+        Kind kTest = sTest.kind();
+
+        /*
+         * Evaluation
+         */
+        assertEquals(kRef, kTest);
+        assertEquals(sRef, sTest);
+    }
+
+    /**
+     * Test addToBlock at an interior position.
+     */
+    @Test
+    public final void testAddToBlockInterior2() {
+        /*
+         * Setup
+         */
+        Statement sTest = this.createFromFileTest(FILE_NAME_2);
+        Statement sRef = this.createFromFileRef(FILE_NAME_2);
+        Statement emptyBlock = sRef.newInstance();
+        Statement nestedTest = sTest.removeFromBlock(1);
+        Statement nestedRef = sRef.removeFromBlock(1);
+        sRef.addToBlock(2, nestedRef);
+
+        /*
+         * The call
+         */
+        sTest.addToBlock(2, nestedTest);
+
+        /*
+         * Evaluation
+         */
+        assertEquals(emptyBlock, nestedTest);
+        assertEquals(sRef, sTest);
+    }
+
+    /**
+     * Test removeFromBlock at the front leaving a non-empty block behind.
+     */
+    @Test
+    public final void testRemoveFromBlockFrontLeavingNonEmpty2() {
+        /*
+         * Setup
+         */
+        Statement sTest = this.createFromFileTest(FILE_NAME_2);
+        Statement sRef = this.createFromFileRef(FILE_NAME_2);
+        Statement nestedRef = sRef.removeFromBlock(0);
+
+        /*
+         * The call
+         */
+        Statement nestedTest = sTest.removeFromBlock(0);
+
+        /*
+         * Evaluation
+         */
+        assertEquals(sRef, sTest);
+        assertEquals(nestedRef, nestedTest);
+    }
+
+    /**
+     * Test lengthOfBlock, greater than zero.
+     */
+    @Test
+    public final void testLengthOfBlockNonEmpty2() {
+        /*
+         * Setup
+         */
+        Statement sTest = this.createFromFileTest(FILE_NAME_2);
+        Statement sRef = this.createFromFileRef(FILE_NAME_2);
+        int lengthRef = sRef.lengthOfBlock();
+
+        /*
+         * The call
+         */
+        int lengthTest = sTest.lengthOfBlock();
+
+        /*
+         * Evaluation
+         */
+        assertEquals(lengthRef, lengthTest);
+        assertEquals(sRef, sTest);
+    }
+
+    /**
+     * Test assembleIf.
+     */
+    @Test
+    public final void testAssembleIf2() {
+        /*
+         * Setup
+         */
+        Statement blockTest = this.createFromFileTest(FILE_NAME_2);
+        Statement blockRef = this.createFromFileRef(FILE_NAME_2);
+        Statement emptyBlock = blockRef.newInstance();
+        Statement sourceTest = blockTest.removeFromBlock(3);
+        Statement sRef = blockRef.removeFromBlock(3);
+        Statement nestedTest = sourceTest.newInstance();
+        Condition c = sourceTest.disassembleIf(nestedTest);
+        Statement sTest = sourceTest.newInstance();
+
+        /*
+         * The call
+         */
+        sTest.assembleIf(c, nestedTest);
+
+        /*
+         * Evaluation
+         */
+        assertEquals(emptyBlock, nestedTest);
+        assertEquals(sRef, sTest);
+    }
+
+    /**
+     * Test disassembleIf.
+     */
+    @Test
+    public final void testDisassembleIf2() {
+        /*
+         * Setup
+         */
+        Statement blockTest = this.createFromFileTest(FILE_NAME_2);
+        Statement blockRef = this.createFromFileRef(FILE_NAME_2);
+        Statement sTest = blockTest.removeFromBlock(3);
+        Statement sRef = blockRef.removeFromBlock(3);
+        Statement nestedTest = sTest.newInstance();
+        Statement nestedRef = sRef.newInstance();
+        Condition cRef = sRef.disassembleIf(nestedRef);
+
+        /*
+         * The call
+         */
+        Condition cTest = sTest.disassembleIf(nestedTest);
+
+        /*
+         * Evaluation
+         */
+        assertEquals(nestedRef, nestedTest);
+        assertEquals(sRef, sTest);
+        assertEquals(cRef, cTest);
+    }
+
+    /**
+     * Test assembleIfElse.
+     */
+    @Test
+    public final void testAssembleIfElse2() {
+        /*
+         * Setup
+         */
+        final int ifElsePos = 1;
+        Statement blockTest = this.createFromFileTest(FILE_NAME_2);
+        Statement blockRef = this.createFromFileRef(FILE_NAME_2);
+        Statement emptyBlock = blockRef.newInstance();
+        Statement sourceTest = blockTest.removeFromBlock(ifElsePos);
+        Statement sRef = blockRef.removeFromBlock(ifElsePos);
+        Statement thenBlockTest = sourceTest.newInstance();
+        Statement elseBlockTest = sourceTest.newInstance();
+        Condition cTest = sourceTest.disassembleIfElse(thenBlockTest,
+                elseBlockTest);
+        Statement sTest = blockTest.newInstance();
+
+        /*
+         * The call
+         */
+        sTest.assembleIfElse(cTest, thenBlockTest, elseBlockTest);
+
+        /*
+         * Evaluation
+         */
+        assertEquals(emptyBlock, thenBlockTest);
+        assertEquals(emptyBlock, elseBlockTest);
+        assertEquals(sRef, sTest);
+    }
+
+    /**
+     * Test disassembleIfElse.
+     */
+    @Test
+    public final void testDisassembleIfElse2() {
+        /*
+         * Setup
+         */
+        final int ifElsePos = 1;
+        Statement blockTest = this.createFromFileTest(FILE_NAME_2);
+        Statement blockRef = this.createFromFileRef(FILE_NAME_2);
+        Statement sTest = blockTest.removeFromBlock(ifElsePos);
+        Statement sRef = blockRef.removeFromBlock(ifElsePos);
+        Statement thenBlockTest = sTest.newInstance();
+        Statement elseBlockTest = sTest.newInstance();
+        Statement thenBlockRef = sRef.newInstance();
+        Statement elseBlockRef = sRef.newInstance();
+        Condition cRef = sRef.disassembleIfElse(thenBlockRef, elseBlockRef);
+
+        /*
+         * The call
+         */
+        Condition cTest = sTest.disassembleIfElse(thenBlockTest, elseBlockTest);
+
+        /*
+         * Evaluation
+         */
+        assertEquals(cRef, cTest);
+        assertEquals(thenBlockRef, thenBlockTest);
+        assertEquals(elseBlockRef, elseBlockTest);
+        assertEquals(sRef, sTest);
+    }
+
+    /**
+     * Test assembleWhile.
+     */
+    @Test
+    public final void testAssembleWhile2() {
+        /*
+         * Setup
+         */
+        Statement blockTest = this.createFromFileTest(FILE_NAME_2);
+        Statement blockRef = this.createFromFileRef(FILE_NAME_2);
+        Statement emptyBlock = blockRef.newInstance();
+        Statement sourceTest = blockTest.removeFromBlock(2);
+        Statement sourceRef = blockRef.removeFromBlock(2);
+        Statement nestedTest = sourceTest.newInstance();
+        Statement nestedRef = sourceRef.newInstance();
+        Condition cTest = sourceTest.disassembleWhile(nestedTest);
+        Condition cRef = sourceRef.disassembleWhile(nestedRef);
+        Statement sRef = sourceRef.newInstance();
+        sRef.assembleWhile(cRef, nestedRef);
+        Statement sTest = sourceTest.newInstance();
+
+        /*
+         * The call
+         */
+        sTest.assembleWhile(cTest, nestedTest);
+
+        /*
+         * Evaluation
+         */
+        assertEquals(emptyBlock, nestedTest);
+        assertEquals(sRef, sTest);
+    }
+
+    /**
+     * Test disassembleWhile.
+     */
+    @Test
+    public final void testDisassembleWhile2() {
+        /*
+         * Setup
+         */
+        final int whilePos = 2;
+        Statement blockTest = this.createFromFileTest(FILE_NAME_2);
+        Statement blockRef = this.createFromFileRef(FILE_NAME_2);
+        Statement sTest = blockTest.removeFromBlock(whilePos);
+        Statement sRef = blockRef.removeFromBlock(whilePos);
+        Statement nestedTest = sTest.newInstance();
+        Statement nestedRef = sRef.newInstance();
+        Condition cRef = sRef.disassembleWhile(nestedRef);
+
+        /*
+         * The call
+         */
+        Condition cTest = sTest.disassembleWhile(nestedTest);
+
+        /*
+         * Evaluation
+         */
+        assertEquals(nestedRef, nestedTest);
+        assertEquals(sRef, sTest);
+        assertEquals(cRef, cTest);
+    }
+
+    /**
+     * Test disassembleCall.
+     */
+    @Test
+    public final void testDisassembleCall2() {
+        /*
+         * Setup
+         */
+        Statement blockTest = this.createFromFileTest(FILE_NAME_2);
+        Statement blockRef = this.createFromFileRef(FILE_NAME_2);
+        Statement sTest = blockTest.removeFromBlock(0);
+        Statement sRef = blockRef.removeFromBlock(0);
+        String nRef = sRef.disassembleCall();
+
+        /*
+         * The call
+         */
+        String nTest = sTest.disassembleCall();
+
+        /*
+         * Evaluation
+         */
+        assertEquals(sRef, sTest);
+        assertEquals(nRef, nTest);
+    }
 
 }
