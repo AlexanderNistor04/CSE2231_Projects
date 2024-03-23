@@ -107,7 +107,7 @@ public class Program2 extends ProgramSecondary {
     private void createNewRep() {
 
         //Initializes all data structures used to base component
-        this.name = "Unamed";
+        this.name = "Unnamed";
         this.context = new Map1L<String, Statement>();
         this.body = new Statement1();
 
