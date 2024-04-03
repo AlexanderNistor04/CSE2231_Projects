@@ -5,13 +5,14 @@ import components.simplewriter.SimpleWriter;
 import components.simplewriter.SimpleWriter1L;
 import components.statement.Statement;
 import components.statement.Statement1;
+import components.utilities.Reporter;
 import components.utilities.Tokenizer;
 
 /**
  * Layered implementation of secondary methods {@code parse} and
  * {@code parseBlock} for {@code Statement}.
  *
- * @author Put your name here
+ * @author Akshay Anand and Alexander Nistor
  *
  */
 public final class Statement1Parse1 extends Statement1 {
@@ -63,7 +64,44 @@ public final class Statement1Parse1 extends Statement1 {
         assert tokens.length() > 0 && tokens.front().equals("IF") : ""
                 + "Violation of: <\"IF\"> is proper prefix of tokens";
 
-        // TODO - fill in body
+        //Checks properties of beginning kind and condition
+        Reporter.assertElseFatalError(Tokenizer.isIdentifier(tokens.dequeue()),
+                "Invalid Token");
+
+        String conditionTemp = tokens.dequeue();
+        Reporter.assertElseFatalError(Tokenizer.isIdentifier(conditionTemp),
+                "Invalid Condition");
+
+        //Stores parsed condition for later
+        Condition c = parseCondition(conditionTemp);
+
+        Reporter.assertElseFatalError(tokens.dequeue().equals("THEN"),
+                "Invalid Token");
+
+        //Parse if-statement and possibly else-statement as well
+        Statement temp1 = s.newInstance();
+        temp1.parseBlock(tokens);
+
+        if (tokens.front().equals("ELSE")) {
+
+            Reporter.assertElseFatalError(tokens.dequeue().equals("ELSE"),
+                    "Invalid Token");
+
+            //Parse blocks
+            Statement temp2 = s.newInstance();
+            temp2.parseBlock(tokens);
+
+            //Assemble statement
+            s.assembleIfElse(c, temp1, temp2);
+        } else {
+            s.assembleIf(c, temp1);
+        }
+
+        //Checks ending conditions for queue tokens
+        Reporter.assertElseFatalError(tokens.dequeue().equals("END"),
+                "Invalid Token");
+        Reporter.assertElseFatalError(Tokenizer.isKeyword(tokens.dequeue()),
+                "Invalid Token");
 
     }
 
@@ -94,7 +132,30 @@ public final class Statement1Parse1 extends Statement1 {
         assert tokens.length() > 0 && tokens.front().equals("WHILE") : ""
                 + "Violation of: <\"WHILE\"> is proper prefix of tokens";
 
-        // TODO - fill in body
+        //Checks properties of beginning kind and condition
+        Reporter.assertElseFatalError(Tokenizer.isIdentifier(tokens.dequeue()),
+                "Invalid Token");
+
+        String conditionTemp = tokens.dequeue();
+        Reporter.assertElseFatalError(Tokenizer.isIdentifier(conditionTemp),
+                "Invalid Condition");
+
+        //Stores parsed condition for later
+        Condition c = parseCondition(conditionTemp);
+
+        Reporter.assertElseFatalError(tokens.dequeue().equals("THEN"),
+                "Invalid Token");
+
+        //Parse while statement and after assemble it
+        Statement temp1 = s.newInstance();
+        temp1.parseBlock(tokens);
+        s.assembleWhile(c, temp1);
+
+        //Checks ending conditions for queue tokens
+        Reporter.assertElseFatalError(tokens.dequeue().equals("END"),
+                "Invalid Token");
+        Reporter.assertElseFatalError(Tokenizer.isKeyword(tokens.dequeue()),
+                "Invalid Token");
 
     }
 
@@ -121,7 +182,15 @@ public final class Statement1Parse1 extends Statement1 {
                 && Tokenizer.isIdentifier(tokens.front()) : ""
                         + "Violation of: identifier string is proper prefix of tokens";
 
-        // TODO - fill in body
+        //Stores name of call to be checked and used later
+        String nameOfCall = tokens.dequeue();
+
+        //Check if name is invalid
+        Reporter.assertElseFatalError(Tokenizer.isIdentifier(nameOfCall),
+                "Invalid Identifier");
+
+        //Assembles call
+        s.assembleCall(nameOfCall);
 
     }
 
@@ -146,7 +215,23 @@ public final class Statement1Parse1 extends Statement1 {
         assert tokens.length() > 0 : ""
                 + "Violation of: Tokenizer.END_OF_INPUT is a suffix of tokens";
 
-        // TODO - fill in body
+        //Store name to check if it is a keyword or identifier and later use it
+        //to parse
+        String name = tokens.dequeue();
+
+        //Checks if name is a keyword or identifier else reports an error
+        Reporter.assertElseFatalError(
+                Tokenizer.isKeyword(name) || Tokenizer.isIdentifier(name),
+                "Invalid Token");
+
+        //If-else if-else statement parses based on identifier/keyword
+        if (name.equals("IF")) {
+            parseIf(tokens, this);
+        } else if (name.equals("WHILE")) {
+            parseWhile(tokens, this);
+        } else {
+            parseCall(tokens, this);
+        }
 
     }
 
@@ -156,7 +241,20 @@ public final class Statement1Parse1 extends Statement1 {
         assert tokens.length() > 0 : ""
                 + "Violation of: Tokenizer.END_OF_INPUT is a suffix of tokens";
 
-        // TODO - fill in body
+        //while loop parses until some form of an ending is reached
+        Statement temp = this.newInstance();
+        while (!(tokens.front().equals("ELSE") || tokens.front().equals("END")
+                || tokens.front().equals(Tokenizer.END_OF_INPUT))) {
+
+            //Parse through tokens queue
+            this.parse(tokens);
+
+            //Add parsed part to AST
+            temp.addToBlock(temp.lengthOfBlock(), this);
+        }
+
+        //Transfer AST to this
+        this.transferFrom(temp);
 
     }
 
