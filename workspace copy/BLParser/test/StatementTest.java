@@ -11,7 +11,7 @@ import components.utilities.Tokenizer;
 /**
  * JUnit test fixture for {@code Statement}'s constructor and kernel methods.
  *
- * @author Put your name here
+ * @author Alexander Nistor & Akshay Anand
  *
  */
 public abstract class StatementTest {
@@ -20,7 +20,10 @@ public abstract class StatementTest {
      * The name of a file containing a sequence of BL statements.
      */
     private static final String FILE_NAME_1 = "test/statement1.bl",
-            FILE_NAME_2 = "test/statement2.bl";
+            FILE_NAME_2 = "test/statement2.bl",
+            FILE_NAME_3 = "test/statement3.bl",
+            FILE_NAME_4 = "test/statement4.bl",
+            FILE_NAME_5 = "test/statement5.bl";
 
     /**
      * Invokes the {@code Statement} constructor for the implementation under
@@ -88,5 +91,61 @@ public abstract class StatementTest {
     // TODO - add more test cases for valid inputs for both parse and parseBlock
     // TODO - add more test cases for as many distinct syntax errors as possible
     //        for both parse and parseBlock
+
+    /**
+     * Test of parse on syntactically invalid input. Made a call bazinga!
+     */
+    @Test(expected = RuntimeException.class)
+    public final void testParseError1() {
+        /*
+         * Setup
+         */
+        Statement sTest = this.constructorTest();
+        SimpleReader file = new SimpleReader1L(FILE_NAME_3);
+        Queue<String> tokens = Tokenizer.tokens(file);
+        file.close();
+        /*
+         * The call--should result in an error being caught
+         */
+        sTest.parse(tokens);
+    }
+
+    /**
+     * Test of parse on syntactically invalid input. Incorrectly nested if and
+     * while statements
+     */
+    @Test(expected = RuntimeException.class)
+    public final void testParseError2() {
+        /*
+         * Setup
+         */
+        Statement sTest = this.constructorTest();
+        SimpleReader file = new SimpleReader1L(FILE_NAME_4);
+        Queue<String> tokens = Tokenizer.tokens(file);
+        file.close();
+        /*
+         * The call--should result in an error being caught
+         */
+        sTest.parse(tokens);
+    }
+
+    /**
+     * Test of parse on syntactically invalid input. Has IF - DO instead of IF -
+     * THEN
+     */
+    @Test(expected = RuntimeException.class)
+    public final void testParseError3() {
+        /*
+         * Setup
+         */
+        Statement sTest = this.constructorTest();
+        SimpleReader file = new SimpleReader1L(FILE_NAME_5);
+        Queue<String> tokens = Tokenizer.tokens(file);
+        file.close();
+        /*
+         * The call--should result in an error being caught
+         */
+        sTest.parse(tokens);
+    }
 
 }
