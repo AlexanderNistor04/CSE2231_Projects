@@ -11,7 +11,7 @@ import components.utilities.Tokenizer;
 /**
  * JUnit test fixture for {@code Program}'s constructor and kernel methods.
  *
- * @author Put your name here
+ * @author Alexander Nistor & Akshay Anand
  *
  */
 public abstract class ProgramTest {
@@ -20,7 +20,9 @@ public abstract class ProgramTest {
      * The names of a files containing a (possibly invalid) BL programs.
      */
     private static final String FILE_NAME_1 = "test/program1.bl",
-            FILE_NAME_2 = "test/program2.bl";
+            FILE_NAME_2 = "test/program2.bl", FILE_NAME_3 = "test/program3.bl",
+            FILE_NAME_4 = "test/program4.bl", FILE_NAME_5 = "test/program5.bl",
+            FILE_NAME_6 = "test/program6.bl";
 
     /**
      * Invokes the {@code Program} constructor for the implementation under test
@@ -86,5 +88,81 @@ public abstract class ProgramTest {
 
     // TODO - add more test cases for valid inputs
     // TODO - add more test cases for as many distinct syntax errors as possible
+
+    /**
+     * Test of parse on syntactically invalid input. in line 1, PROGRAM is
+     * misspelled as PROGRM
+     */
+    @Test(expected = RuntimeException.class)
+    public final void testParseError1() {
+        /*
+         * Setup
+         */
+        Program pTest = this.constructorTest();
+        SimpleReader file = new SimpleReader1L(FILE_NAME_3);
+        Queue<String> tokens = Tokenizer.tokens(file);
+        file.close();
+        /*
+         * The call--should result in a syntax error being found
+         */
+        pTest.parse(tokens);
+    }
+
+    /**
+     * Test of parse on syntactically invalid input. Misspelled instruction one
+     * as 1
+     */
+    @Test(expected = RuntimeException.class)
+    public final void testParseError2() {
+        /*
+         * Setup
+         */
+        Program pTest = this.constructorTest();
+        SimpleReader file = new SimpleReader1L(FILE_NAME_4);
+        Queue<String> tokens = Tokenizer.tokens(file);
+        file.close();
+        /*
+         * The call--should result in a syntax error being found
+         */
+        pTest.parse(tokens);
+    }
+
+    /**
+     * Test of parse on syntactically invalid input. Used end if to end a while
+     * loop
+     */
+    @Test(expected = RuntimeException.class)
+    public final void testParseError3() {
+        /*
+         * Setup
+         */
+        Program pTest = this.constructorTest();
+        SimpleReader file = new SimpleReader1L(FILE_NAME_5);
+        Queue<String> tokens = Tokenizer.tokens(file);
+        file.close();
+        /*
+         * The call--should result in a syntax error being found
+         */
+        pTest.parse(tokens);
+    }
+
+    /**
+     * Test of parse on syntactically invalid input. Spelled true as the while
+     * loop condition as TRUE
+     */
+    @Test(expected = RuntimeException.class)
+    public final void testParseError4() {
+        /*
+         * Setup
+         */
+        Program pTest = this.constructorTest();
+        SimpleReader file = new SimpleReader1L(FILE_NAME_6);
+        Queue<String> tokens = Tokenizer.tokens(file);
+        file.close();
+        /*
+         * The call--should result in a syntax error being found
+         */
+        pTest.parse(tokens);
+    }
 
 }
