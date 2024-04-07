@@ -58,9 +58,13 @@ public final class Program1Parse1 extends Program1 {
         assert tokens.length() > 0 && tokens.front().equals("INSTRUCTION") : ""
                 + "Violation of: <\"INSTRUCTION\"> is proper prefix of tokens";
 
+        //Checks if instruction keyword is present in beginning of queue
+        Reporter.assertElseFatalError(tokens.dequeue().equals("INSTRUCTION"),
+                "Instruction is not a prefix of tokens");
+
         //Checks if identifier and tokens are valid, if not then it sends an error
         String start = tokens.dequeue();
-        Reporter.assertElseFatalError(Tokenizer.isIdentifier(tokens.dequeue()),
+        Reporter.assertElseFatalError(Tokenizer.isIdentifier(start),
                 "Invalid Identifier");
         Reporter.assertElseFatalError(tokens.dequeue().equals("IS"),
                 "Invalid Token");
