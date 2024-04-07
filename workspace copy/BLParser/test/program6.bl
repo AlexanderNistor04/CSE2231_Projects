@@ -1,0 +1,6 @@
+PROGRAM Test IS
+BEGIN
+  WHILE TRUE DO
+     move
+  END WHILE
+END Test
