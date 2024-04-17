@@ -3,8 +3,11 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Map.Entry;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.TreeMap;
 
 import components.utilities.Reporter;
@@ -31,6 +34,20 @@ public final class TagCloudGenerator {
         @Override
         public int compare(String o1, String o2) {
             return o1.compareTo(o2);
+        }
+
+    }
+
+    /**
+    *
+    */
+    private static class ValueOrder
+            implements Comparator<Entry<String, Integer>> {
+
+        @Override
+        public int compare(Entry<String, Integer> o1,
+                Entry<String, Integer> o2) {
+            return o2.getValue().compareTo(o1.getValue());
         }
 
     }
@@ -138,6 +155,7 @@ public final class TagCloudGenerator {
 
         final int maxFontSize = 48;
         final int minFontSize = 11;
+        int i = 0;
         for (String word : map.keySet()) {
             int fontSize = maxFontSize - minFontSize;
             fontSize *= (map.get(word) - lowest);
@@ -150,6 +168,11 @@ public final class TagCloudGenerator {
             } catch (IOException e) {
                 System.err.println("Error writing to file");
             }
+
+            i++;
+            if (i >= num) {
+                break;
+            }
         }
 
         try {
@@ -159,6 +182,32 @@ public final class TagCloudGenerator {
         }
 
         return;
+    }
+
+    private TreeMap<String, Integer> highestNEntriesByValue(
+            TreeMap<String, Integer> map, int n) {
+        TreeMap<String, Integer> trimmedMap = new TreeMap<String, Integer>(
+                new AlphabeticalOrder());
+        TreeMap<String, Integer> tempMap = new TreeMap<String, Integer>(
+                new AlphabeticalOrder());
+        ArrayList<Entry<String, Integer>> entries = new ArrayList<Entry<String, Integer>>();
+
+        Set<String> keys = map.keySet();
+        for (String key : keys) {
+            tempMap.put(key, map.get(key));
+        }
+
+        while (map.size() > 0) {
+            entries.add(map.pollFirstEntry());
+        }
+
+        entries.sort(new ValueOrder());
+
+        for (int i = 0; i < n; i++) {
+            trimmedMap.put(entries.get(i).getKey(), entries.get(i).getValue());
+        }
+
+        return trimmedMap;
     }
 
     /**
@@ -193,7 +242,9 @@ public final class TagCloudGenerator {
 
         TagCloudGenerator generator = new TagCloudGenerator();
         TreeMap<String, Integer> wordMap = generator.generateMap(input);
-        generator.printMap(wordMap, output, numWords, fileIn);
+        TreeMap<String, Integer> trimmedMap = generator
+                .highestNEntriesByValue(wordMap, numWords);
+        generator.printMap(trimmedMap, output, numWords, fileIn);
 
         in.close();
         try {
