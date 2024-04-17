@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Map.Entry;
 import java.util.Scanner;
-import java.util.Set;
 import java.util.TreeMap;
 
 import components.utilities.Reporter;
@@ -33,7 +32,7 @@ public final class TagCloudGenerator {
 
         @Override
         public int compare(String o1, String o2) {
-            return o1.compareTo(o2);
+            return o1.toLowerCase().compareTo(o2.toLowerCase());
         }
 
     }
@@ -192,10 +191,7 @@ public final class TagCloudGenerator {
                 new AlphabeticalOrder());
         ArrayList<Entry<String, Integer>> entries = new ArrayList<Entry<String, Integer>>();
 
-        Set<String> keys = map.keySet();
-        for (String key : keys) {
-            tempMap.put(key, map.get(key));
-        }
+        map.putAll(tempMap);
 
         while (map.size() > 0) {
             entries.add(map.pollFirstEntry());
@@ -206,6 +202,8 @@ public final class TagCloudGenerator {
         for (int i = 0; i < n; i++) {
             trimmedMap.put(entries.get(i).getKey(), entries.get(i).getValue());
         }
+
+        tempMap.putAll(map);
 
         return trimmedMap;
     }
