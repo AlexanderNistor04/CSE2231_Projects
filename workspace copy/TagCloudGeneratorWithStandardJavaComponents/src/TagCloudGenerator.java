@@ -26,7 +26,8 @@ public final class TagCloudGenerator {
     }
 
     /**
-     *
+     * custom comparator for sorting Strings in alphabetical order instead of
+     * natural order.
      */
     private static class AlphabeticalOrder implements Comparator<String> {
 
@@ -38,8 +39,9 @@ public final class TagCloudGenerator {
     }
 
     /**
-    *
-    */
+     * custom comparator for sorting Map Entries using their values instead of
+     * keys. Sorts Integer values in decreasing order.
+     */
     private static class ValueOrder
             implements Comparator<Entry<String, Integer>> {
 
@@ -52,9 +54,12 @@ public final class TagCloudGenerator {
     }
 
     /**
+     * creates a TreeMap of every word in the input stream paired with the
+     * frequency of that word, sorted alphabetically by key.
      *
      * @param in
-     * @return
+     *            The input stream
+     * @return The TreeMap of words in the input stream
      */
     private TreeMap<String, Integer> generateMap(BufferedReader in) {
         TreeMap<String, Integer> map = new TreeMap(new AlphabeticalOrder());
@@ -118,11 +123,17 @@ public final class TagCloudGenerator {
     }
 
     /**
+     * generates a tag cloud of words in HTML.
      *
      * @param map
+     *            the TreeMap of words paired with their frequency
      * @param out
+     *            the output stream where the HTML will be printed
      * @param num
+     *            the number of words in map to display
      * @param inputFileName
+     *            the name of the input file, will be displayed at the top of
+     *            the HTML page
      */
     private void printMap(TreeMap<String, Integer> map, BufferedWriter out,
             int num, String inputFileName) {
@@ -154,7 +165,6 @@ public final class TagCloudGenerator {
 
         final int maxFontSize = 48;
         final int minFontSize = 11;
-        int i = 0;
         for (String word : map.keySet()) {
             int fontSize = maxFontSize - minFontSize;
             fontSize *= (map.get(word) - lowest);
@@ -167,11 +177,6 @@ public final class TagCloudGenerator {
             } catch (IOException e) {
                 System.err.println("Error writing to file");
             }
-
-            i++;
-            if (i >= num) {
-                break;
-            }
         }
 
         try {
@@ -183,6 +188,16 @@ public final class TagCloudGenerator {
         return;
     }
 
+    /**
+     * returns a trimmed map which only contains the words with the highest N
+     * words by frequency.
+     *
+     * @param map
+     *            the map of words paired with their frequency
+     * @param n
+     *            the size of the trimmed map
+     * @return the trimmed map
+     */
     private TreeMap<String, Integer> highestNEntriesByValue(
             TreeMap<String, Integer> map, int n) {
         TreeMap<String, Integer> trimmedMap = new TreeMap<String, Integer>(
